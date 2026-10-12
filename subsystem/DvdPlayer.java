@@ -1,66 +1,87 @@
 package subsystem;
 
-public class DvdPlayer{
-    private String currentMovie = "Waiting screen";
-    private boolean isPlaying = false;
-    private boolean isOn = false;
+public class DvdPlayer {
+    private static final String WAITING_SCREEN = "Waiting screen";
 
-    public void turnOn(){
-        if(!isOn){
-            isOn = true;
-            System.out.println("DvdPlayer now is active");
-        }else{
-            System.out.println("DvdPlayer now is active you can't turn it On!");
+    private String currentMovie = WAITING_SCREEN;
+    private boolean playing;
+    private boolean on;
+
+    public void turnOn() {
+        if (on) {
+            System.out.println("DVD player is already on.");
+            return;
         }
+        on = true;
+        System.out.println("DVD player turned on.");
     }
 
-    public void turnOff(){
-        if(isOn){
-            isPlaying = false;
-            isOn = false;
-            System.out.println("DvdPlayer now is inactive");
-        }else{
-            System.out.println("DvdPlayer now is inactive you can't turn it Off!");
+    public void turnOff() {
+        if (!on) {
+            System.out.println("DVD player is already off.");
+            return;
         }
+        stopMovie();
+        on = false;
+        System.out.println("DVD player turned off.");
     }
 
-    public void playMovie(){
-        if(isOn){
-            isPlaying = true;
-            System.out.println("Currently playing : " + currentMovie);
-        }else{
-            System.out.println("Please turn on the DVD Player");
-        }
+    public void playMovie() {
+        playMovie(currentMovie);
     }
 
-    public void playMovie(String movieName){
-        if(isOn){
-            currentMovie = movieName;
-            isPlaying = true;
-            System.out.println("Currently playing : " + movieName);
-        }else{
-            System.out.println("Please turn on the DVD Player");
+    public void playMovie(String movieName) {
+        if (!ensurePoweredOn("play a movie")) {
+            return;
         }
+        if (movieName == null || movieName.isBlank()) {
+            System.out.println("Movie name must not be empty.");
+            return;
+        }
+
+        currentMovie = movieName.trim();
+        playing = true;
+        System.out.println("Now playing: " + currentMovie + ".");
     }
 
-
-
-    public void togglePause(){
-        if(isOn){
-            if(isPlaying){
-                isPlaying = false;
-                System.out.println("Movie paused");
-            }else{
-                isPlaying = true;
-                System.out.println("Movie is unpaused");
-            }
-        }else{
-            System.out.println("Please turn on the DVD Player");
+    public void stopMovie() {
+        if (!on || !playing) {
+            return;
         }
+        playing = false;
+        System.out.println("Movie stopped: " + currentMovie + ".");
+        currentMovie = WAITING_SCREEN;
     }
 
-    public void discEjection(){
-        isPlaying = false;
-        System.out.println("disc is ready to be ejected");
+    public void togglePause() {
+        if (!ensurePoweredOn("pause or unpause")) {
+            return;
+        }
+        if (WAITING_SCREEN.equals(currentMovie)) {
+            System.out.println("No movie loaded.");
+            return;
+        }
+        playing = !playing;
+        System.out.println(playing ? "Movie resumed: " + currentMovie + "." : "Movie paused.");
+    }
+
+    public void ejectDisc() {
+        if (!ensurePoweredOn("eject a disc")) {
+            return;
+        }
+        stopMovie();
+        System.out.println("Disc ejected.");
+    }
+
+    public void discEjection() {
+        ejectDisc();
+    }
+
+    private boolean ensurePoweredOn(String action) {
+        if (on) {
+            return true;
+        }
+        System.out.println("Turn on the DVD player before you " + action + ".");
+        return false;
     }
 }

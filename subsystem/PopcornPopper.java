@@ -1,50 +1,59 @@
 package subsystem;
 
-public class PopcornPopper{
-    private boolean isCooking = false;
-    private boolean isOn= false;
-    private boolean hasPopcorn = false;
+public class PopcornPopper {
+    private boolean cooking;
+    private boolean on;
+    private boolean hasPopcorn;
 
-    public void turnOn(){
-        if(!isOn){
-            isOn = true;
-            System.out.println("PopcornPopper now is active");
-        }else{
-            System.out.println("PopcornPopper now is active you can't turn it On!");
+    public void turnOn() {
+        if (on) {
+            System.out.println("Popcorn popper is already on.");
+            return;
         }
+        on = true;
+        System.out.println("Popcorn popper turned on.");
     }
 
-    public void turnOff(){
-        if(isOn){
-            isOn = false;
-            System.out.println("PopcornPopper now is inactive");
-        }else{
-            System.out.println("PopcornPopper now is inactive you can't turn it Off!");
+    public void turnOff() {
+        if (!on) {
+            System.out.println("Popcorn popper is already off.");
+            return;
         }
+        cooking = false;
+        on = false;
+        System.out.println("Popcorn popper turned off.");
     }
 
-    public void cookPopcorn(){
-        if(!isOn){
-            System.out.println("Please turn Popcorn Popper on");
-        }else{
-            if(isCooking){
-                System.out.println("Wait until cooking ends");
-            }else{
-                isCooking = true;
-                System.out.println("Popcorn is cooking");
-                System.out.println("Popcorn is ready");
-                isCooking = false;
-                hasPopcorn = true;
-            }
+    public void cookPopcorn() {
+        if (!ensurePoweredOn()) {
+            return;
         }
+        if (cooking) {
+            System.out.println("Popcorn is already cooking.");
+            return;
+        }
+
+        cooking = true;
+        System.out.println("Popcorn is cooking...");
+        System.out.println("Popcorn is ready.");
+        cooking = false;
+        hasPopcorn = true;
     }
 
-    public void giveOutPopcorn(){
-        if(hasPopcorn){
-            hasPopcorn = false;
-            System.out.println("Popcorn have dispensed");
-        }else{
-            System.out.println("No Popcorn!");
+    public void giveOutPopcorn() {
+        if (!hasPopcorn) {
+            System.out.println("No popcorn to dispense.");
+            return;
         }
+        hasPopcorn = false;
+        System.out.println("Popcorn dispensed.");
+    }
+
+    private boolean ensurePoweredOn() {
+        if (on) {
+            return true;
+        }
+        System.out.println("Turn on the popcorn popper first.");
+        return false;
     }
 }

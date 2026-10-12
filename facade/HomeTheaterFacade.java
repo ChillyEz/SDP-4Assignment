@@ -1,49 +1,104 @@
 package facade;
-import subsystem.*;
 
+import java.util.Objects;
+import subsystem.Amplifier;
+import subsystem.DvdPlayer;
+import subsystem.PopcornPopper;
+import subsystem.Projector;
+import subsystem.Screen;
+import subsystem.TheaterLights;
 
-public class HomeTheaterFacade{
+public class HomeTheaterFacade {
     private final Amplifier amplifier;
     private final DvdPlayer dvdPlayer;
     private final Projector projector;
     private final Screen screen;
     private final TheaterLights lights;
     private final PopcornPopper popcornPopper;
+    private boolean movieRunning;
 
-    public HomeTheaterFacade(){
-        this.amplifier = new Amplifier();
-        this.dvdPlayer = new DvdPlayer();
-        this.projector = new Projector();
-        this.screen = new Screen();
-        this.lights = new TheaterLights();
-        this.popcornPopper = new PopcornPopper();
+    public HomeTheaterFacade() {
+        this(new Amplifier(), new DvdPlayer(), new Projector(), new Screen(), new TheaterLights(), new PopcornPopper());
+    }
+
+    public HomeTheaterFacade(
+            Amplifier amplifier,
+            DvdPlayer dvdPlayer,
+            Projector projector,
+            Screen screen,
+            TheaterLights lights,
+            PopcornPopper popcornPopper) {
+        this.amplifier = Objects.requireNonNull(amplifier, "amplifier must not be null");
+        this.dvdPlayer = Objects.requireNonNull(dvdPlayer, "dvdPlayer must not be null");
+        this.projector = Objects.requireNonNull(projector, "projector must not be null");
+        this.screen = Objects.requireNonNull(screen, "screen must not be null");
+        this.lights = Objects.requireNonNull(lights, "lights must not be null");
+        this.popcornPopper = Objects.requireNonNull(popcornPopper, "popcornPopper must not be null");
     }
 
     public void watchMovie(String movieName) {
-        popcornPopper.turnOn();
-        popcornPopper.cookPopcorn();
+        String normalizedMovieName = normalizeMovieName(movieName);
+        if (movieRunning) {
+            System.out.println("A movie is already running.");
+            return;
+        }
 
-        lights.dimmingLight();
-        screen.lowerScreen();
-
-        projector.turnOn();
-        amplifier.turnOn();
-        amplifier.setVolume(50);
-
-        dvdPlayer.turnOn();
-        dvdPlayer.playMovie(movieName);
+        System.out.println("Get ready to watch a movie...");
+        try {
+            executeStep(popcornPopper::turnOn);
+            executeStep(popcornPopper::cookPopcorn);
+            executeStep(lights::dimLights);
+            executeStep(screen::lowerScreen);
+            executeStep(projector::turnOn);
+            executeStep(() -> projector.setImageMode("CINEMA"));
+            executeStep(amplifier::turnOn);
+            executeStep(() -> amplifier.setVolume(50));
+            executeStep(dvdPlayer::turnOn);
+            executeStep(() -> dvdPlayer.playMovie(normalizedMovieName));
+            movieRunning = true;
+        } catch (RuntimeException exception) {
+            System.out.println("Could not start movie mode: " + exception.getMessage());
+            safeShutdown();
+        }
     }
 
     public void endMovie() {
-        popcornPopper.turnOff();
+        if (!movieRunning) {
+            System.out.println("Home theater is already idle.");
+            return;
+        }
 
-        lights.turnOn();
-        screen.raiseScreen();
+        System.out.println("Shutting movie theater down...");
+        safeShutdown();
+    }
 
-        projector.turnOff();
-        amplifier.turnOff();
+    private void safeShutdown() {
+        executeSafely(dvdPlayer::stopMovie);
+        executeSafely(dvdPlayer::turnOff);
+        executeSafely(amplifier::turnOff);
+        executeSafely(projector::turnOff);
+        executeSafely(screen::raiseScreen);
+        executeSafely(lights::turnOn);
+        executeSafely(popcornPopper::turnOff);
+        movieRunning = false;
+    }
 
-        dvdPlayer.turnOff();
-        
+    private String normalizeMovieName(String movieName) {
+        if (movieName == null || movieName.isBlank()) {
+            throw new IllegalArgumentException("movieName must not be empty");
+        }
+        return movieName.trim();
+    }
+
+    private void executeStep(Runnable step) {
+        step.run();
+    }
+
+    private void executeSafely(Runnable step) {
+        try {
+            step.run();
+        } catch (RuntimeException exception) {
+            System.out.println("Shutdown step failed: " + exception.getMessage());
+        }
     }
 }

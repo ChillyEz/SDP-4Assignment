@@ -3,21 +3,10 @@ import facade.HomeTheaterFacade;
 public class Main {
 
     public static void main(String[] args) {
-
-        HomeTheaterFacade facade = new HomeTheaterFacade();
-
-        facade.watchMovie("Interstellar");
-
-
-        try {
-        Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); 
-       
-        }
-
+        HomeTheaterFacade homeTheater = new HomeTheaterFacade();
+        homeTheater.watchMovie("Interstellar");
 
         System.out.println("----------------------");
-        facade.endMovie();
+        homeTheater.endMovie();
     }
 }

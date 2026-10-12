@@ -1,23 +1,23 @@
 package subsystem;
 
-public class Screen{
-    private boolean isLowered = false;
+public class Screen {
+    private boolean lowered;
 
-    public void lowerScreen(){
-        if(!isLowered){
-            isLowered = true; 
-            System.out.println("Screen now is lowered");
-        }else{
-            System.out.println("You can't lower the Screen twice");
+    public void lowerScreen() {
+        if (lowered) {
+            System.out.println("Screen is already lowered.");
+            return;
         }
+        lowered = true;
+        System.out.println("Screen lowered.");
     }
 
-    public void raiseScreen(){
-        if(isLowered){
-            isLowered = false; 
-            System.out.println("Screen now is raised");
-        }else{
-            System.out.println("You can't raise the Screen twice");
+    public void raiseScreen() {
+        if (!lowered) {
+            System.out.println("Screen is already raised.");
+            return;
         }
+        lowered = false;
+        System.out.println("Screen raised.");
     }
 }

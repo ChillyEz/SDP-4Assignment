@@ -1,20 +1,28 @@
 package subsystem;
 
-public class TheaterLights{
-    private int brightness = 100;
+public class TheaterLights {
+    private static final int MAX_BRIGHTNESS = 100;
+    private static final int MOVIE_BRIGHTNESS = 30;
+    private static final int OFF_BRIGHTNESS = 0;
 
-    public void dimmingLight(){
-        brightness = 30;
-        System.out.println("Theater lights dimmed");
+    private int brightness = MAX_BRIGHTNESS;
+
+    public void dimLights() {
+        brightness = MOVIE_BRIGHTNESS;
+        System.out.println("Theater lights dimmed.");
     }
 
-    public void turnOn(){
-        brightness = 100;
-        System.out.println("Theater lights turned on");
+    public void dimmingLight() {
+        dimLights();
     }
 
-    public void turnOff(){
-        brightness = 0;
-        System.out.println("Theater lights turned off");
+    public void turnOn() {
+        brightness = MAX_BRIGHTNESS;
+        System.out.println("Theater lights turned on.");
+    }
+
+    public void turnOff() {
+        brightness = OFF_BRIGHTNESS;
+        System.out.println("Theater lights turned off.");
     }
 }
