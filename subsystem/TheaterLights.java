@@ -12,10 +12,6 @@ public class TheaterLights {
         System.out.println("Theater lights dimmed.");
     }
 
-    public void dimmingLight() {
-        dimLights();
-    }
-
     public void turnOn() {
         brightness = MAX_BRIGHTNESS;
         System.out.println("Theater lights turned on.");

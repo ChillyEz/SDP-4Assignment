@@ -45,16 +45,16 @@ public class HomeTheaterFacade {
 
         System.out.println("Get ready to watch a movie...");
         try {
-            executeStep(popcornPopper::turnOn);
-            executeStep(popcornPopper::cookPopcorn);
-            executeStep(lights::dimLights);
-            executeStep(screen::lowerScreen);
-            executeStep(projector::turnOn);
-            executeStep(() -> projector.setImageMode("CINEMA"));
-            executeStep(amplifier::turnOn);
-            executeStep(() -> amplifier.setVolume(50));
-            executeStep(dvdPlayer::turnOn);
-            executeStep(() -> dvdPlayer.playMovie(normalizedMovieName));
+            popcornPopper.turnOn();
+            popcornPopper.cookPopcorn();
+            lights.dimLights();
+            screen.lowerScreen();
+            projector.turnOn();
+            projector.setImageMode("CINEMA");
+            amplifier.turnOn();
+            amplifier.setVolume(50);
+            dvdPlayer.turnOn();
+            dvdPlayer.playMovie(normalizedMovieName);
             movieRunning = true;
         } catch (RuntimeException exception) {
             System.out.println("Could not start movie mode: " + exception.getMessage());
@@ -88,10 +88,6 @@ public class HomeTheaterFacade {
             throw new IllegalArgumentException("movieName must not be empty");
         }
         return movieName.trim();
-    }
-
-    private void executeStep(Runnable step) {
-        step.run();
     }
 
     private void executeSafely(Runnable step) {

@@ -46,10 +46,6 @@ public class Amplifier {
         System.out.println("Surround sound " + (surroundSoundEnabled ? "enabled" : "disabled") + ".");
     }
 
-    public void changeSurroundSound() {
-        toggleSurroundSound();
-    }
-
     private boolean ensurePoweredOn(String action) {
         if (on) {
             return true;

@@ -73,10 +73,6 @@ public class DvdPlayer {
         System.out.println("Disc ejected.");
     }
 
-    public void discEjection() {
-        ejectDisc();
-    }
-
     private boolean ensurePoweredOn(String action) {
         if (on) {
             return true;
