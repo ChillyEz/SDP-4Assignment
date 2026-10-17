@@ -7,6 +7,8 @@ Small Java project showing the **Facade** pattern for a home theater system.
 - `subsystem/*` — independent subsystem classes (`Amplifier`, `DvdPlayer`, `Projector`, `Screen`, `TheaterLights`, `PopcornPopper`)
 - `Main.java` — client that uses only the facade
 
+- ![Схема проекта](UML.svg)
+
 ## Clean Code (6 strongest examples)
 1. **Meaningful names**
    - Before: `dimmingLight()`, `changeSurroundSound()`
