@@ -1,6 +1,5 @@
-package tests;
+package facade;
 
-import facade.HomeTheaterFacade;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

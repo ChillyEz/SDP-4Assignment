@@ -21,7 +21,7 @@ public class HomeTheaterFacade {
         this(new Amplifier(), new DvdPlayer(), new Projector(), new Screen(), new TheaterLights(), new PopcornPopper());
     }
 
-    public HomeTheaterFacade(
+    HomeTheaterFacade(
             Amplifier amplifier,
             DvdPlayer dvdPlayer,
             Projector projector,

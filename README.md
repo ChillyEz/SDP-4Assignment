@@ -1,40 +1,46 @@
-# Home Theater Facade (Java)
+# Home Theater Facade
 
-Small Java project showing the **Facade** pattern for a home theater system.
+A Java implementation of the **Facade** design pattern for a home theater system.
+`HomeTheaterFacade` provides a small API (`watchMovie` and `endMovie`) and coordinates six independent subsystem classes.
 
-## Structure
-- `facade/HomeTheaterFacade.java` — simplified API: `watchMovie(...)`, `endMovie()`
-- `subsystem/*` — independent subsystem classes (`Amplifier`, `DvdPlayer`, `Projector`, `Screen`, `TheaterLights`, `PopcornPopper`)
-- `Main.java` — client that uses only the facade
+## Project structure
 
-- ![Схема проекта](UML.svg)
+```
+src/
+  main/java/        application source code
+  test/java/        JUnit tests
+docs/UML.svg        UML class diagram
+pom.xml             Maven configuration and JUnit dependency
+```
 
-## Clean Code (6 strongest examples)
-1. **Meaningful names**
-   - Before: `dimmingLight()`, `changeSurroundSound()`
-   - After: `dimLights()`, `toggleSurroundSound()`
+![UML class diagram](docs/UML.svg)
 
-2. **Single Responsibility Principle**
-   - `HomeTheaterFacade` coordinates startup/shutdown order.
-   - Subsystems keep their own logic (volume, disc control, lighting, etc.).
+## Run in IntelliJ IDEA
 
-3. **No duplication (DRY)**
-   - Repeated power checks were extracted to helper methods like `ensurePoweredOn(...)` in subsystem classes.
+1. Clone the repository and open the project folder, or open `pom.xml`.
+2. Select JDK 17 or newer when IntelliJ asks.
+3. Run `Main` or run all tests from the Maven/Test panel.
 
-4. **Small focused methods**
-   - Complex flow is split into `watchMovie(...)`, `endMovie()`, `safeShutdown()`, `executeSafely(...)` in facade.
+## Run in VS Code
 
-5. **Defensive programming / error handling**
-   - Facade validates input movie name and performs safe rollback (`safeShutdown`) if startup flow fails.
+1. Install **Extension Pack for Java**.
+2. Open the repository root folder.
+3. Run `Main.java` using the **Run** button, or run tests from the Testing panel.
 
-6. **Encapsulation and low coupling**
-   - Client code uses only `HomeTheaterFacade`.
-   - Subsystem classes do not depend on or know about the facade.
+## Run from the terminal
 
-## Run
-Compile and run from repository root:
+With Maven installed:
 
 ```bash
-javac Main.java facade/*.java subsystem/*.java
-java Main
+mvn test
+mvn package
+java -cp target/classes Main
 ```
+
+## Clean Code highlights
+
+- Clear names such as `dimLights`, `toggleSurroundSound`, and `safeShutdown`.
+- The facade coordinates workflow; subsystem classes keep device-specific behavior.
+- Input validation rejects null or blank movie names.
+- Safe shutdown attempts every cleanup step even if one device fails.
+- The client depends on the facade rather than individual devices.
